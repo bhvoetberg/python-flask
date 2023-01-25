@@ -44,3 +44,11 @@ Python 3.9.12 (main, Apr  5 2022, 06:56:58)
 import os
 os.urandom(8)
 b'\xda\x8cGU\xe3\x00\xa4\xc0'
+
+___
+Form templates
+pip install flask-wtf
+
+___
+To prevent csrf attacks
+{{form.hidden_tag()}}

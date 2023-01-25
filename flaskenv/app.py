@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from datetime import datetime
 from logging import DEBUG
+from forms import RegistrationForm, LoginForm
 
 app = Flask(__name__)
 app.logger.setLevel(DEBUG)
 app.secret_key = b'\xda\x8cGU\xe3\x00\xa4\xc0'
-
 
 # @app.route('/')
 # def home():
@@ -41,6 +41,29 @@ def feedback():
         flash("Your Feedback: " + url)
         return redirect(url_for('index'))
     return render_template('feedback.html')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        flash('Account created!')
+        return redirect(url_for('login'))
+    if form.errors:
+        flash('Validation error:' + str(form.errors))
+        app.logger.error('Validation error:\n' + str(form.errors))
+    return render_template('register.html', title='Register', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        flas('Logged in')
+        return redirect(url_for('index'))
+    else:
+        flash('Login unsuccessful')
+    return render_template('login.html', title='Login', form=form)
 
 
 @app.errorhandler(404)
