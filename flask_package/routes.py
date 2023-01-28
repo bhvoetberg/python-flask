@@ -1,15 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash
+from flask_package import app, bcrypt, db
+from flask_package.forms import RegistrationForm, LoginForm
+from flask_package.models import User
 from datetime import datetime
-from logging import DEBUG
-from forms import RegistrationForm, LoginForm
-
-app = Flask(__name__)
-app.logger.setLevel(DEBUG)
-app.secret_key = b'\xda\x8cGU\xe3\x00\xa4\xc0'
-
-# @app.route('/')
-# def home():
-#     return "Hello World "
 
 
 response = []
@@ -47,6 +40,12 @@ def feedback():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data)
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        db.session.add(user)
+        print(db)
+        print(user)
+        db.session.commit()
         flash('Account created!')
         return redirect(url_for('login'))
     if form.errors:
@@ -59,7 +58,7 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        flas('Logged in')
+        flash('Logged in')
         return redirect(url_for('index'))
     else:
         flash('Login unsuccessful')
@@ -69,9 +68,3 @@ def login():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
-
-
-# app.run()
-
-if __name__ == '__main__':
-    app.run(debug=True)

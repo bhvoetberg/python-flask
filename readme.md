@@ -52,3 +52,28 @@ pip install flask-wtf
 ___
 To prevent csrf attacks
 {{form.hidden_tag()}}
+
+___
+Create columns in class database from console
+db.create_all()
+
+
+___
+pip installs:
+pip install flask
+pip install email_validator
+pip install flask-sqlalchemy
+
+
+___
+from flask_bcrypt import Bcrypt
+bcrypt = Bcrypt()
+bcrypt.generate_password_hash('testing')
+b'$2b$12$kVo0DY367e1IJ95mbTl4x.D5lasKSNq1XhJIrYhfANPl98asGU..G'
+bcrypt.generate_password_hash('testing').decode('utf-8')
+'$2b$12$xn8C4Jw8lGV9GWza4eoLleIE8xZascgayERBhIT92iVsTOEkkU4Xm'
+hashed_pw = bcrypt.generate_password_hash('testing').decode('utf-8')
+bcrypt.check_password_hash(hashed_pw, 'password')
+False
+bcrypt.check_password_hash(hashed_pw, 'testing')
+True
